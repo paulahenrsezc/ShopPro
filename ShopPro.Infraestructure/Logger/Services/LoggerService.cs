@@ -12,14 +12,14 @@ namespace ShopPro.Infraestructure.Logger.Services
             _logger = logger;
         }
 
-        public void LogError(string message, string exception)
+        public void LogError(string message, string exception) 
         {
-            _logger.LogError($"{message} - Exception: {exception}");
+            _logger.LogError(exception, message);
         }
 
-        public void LogInformation(string message, string exception)
+        public void LogInformation(string message)
         {
-            _logger.LogInformation($"{message} - Exception: {exception}");
+            _logger.LogInformation(message);
         }
     }
 }

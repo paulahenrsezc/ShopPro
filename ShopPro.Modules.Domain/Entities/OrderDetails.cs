@@ -7,10 +7,9 @@ namespace ShopPro.Modules.Domain.Entities
     [Table("OrderDetails", Schema = "Sales")]
     public class OrderDetails : BaseEntity<int>
     {
+        [Key]
         [Column("orderid")]
         public override int Id { get; set; }
-
-        [Key]
         public int productid { get; set; }
         public decimal unitprice { get; set; }
         public short qty { get; set; }

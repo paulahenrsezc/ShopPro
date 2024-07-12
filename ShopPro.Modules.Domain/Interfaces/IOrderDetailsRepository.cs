@@ -2,8 +2,8 @@
 
 namespace ShopPro.Modules.Domain.Interfaces
 {
-    public interface IOrderDetailsRepository : IBaseRepository<Domain.Entities.OrderDetails, int>
+    public interface IOrderDetailsRepository : IBaseRepository<Entities.OrderDetails, int>
     {
-        List<Modules.Domain.Entities.OrderDetails> GetOrderDetails(int orderdetailsId);
+        List<Modules.Domain.Entities.OrderDetails> GetOrderDetailsById(int orderid);
     }
 }

@@ -13,7 +13,7 @@ namespace ShopPro.Common.Data.Repository
         void Update(TEntity entity);
         void Remove(TEntity entity);
         List<TEntity> GetAll();
-        TEntity GetEntityBy(TType Id);
-        bool Exist(Expression<Func<TEntity, bool>> filter);
+        TEntity GetEntityByID(TType Id);
+        bool Exists(Expression<Func<TEntity, bool>> filter);
     }
 }
