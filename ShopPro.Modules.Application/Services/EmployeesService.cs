@@ -1,14 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
-using ShopPro.Infraestructure.Logger.Interfaces;
+﻿using ShopPro.Infraestructure.Logger.Interfaces;
 using ShopPro.Modules.Application.Core;
 using ShopPro.Modules.Application.Dtos.Employees;
-using ShopPro.Modules.Application.Dtos.OrderDetails;
+using ShopPro.Modules.Application.Extension;
 using ShopPro.Modules.Application.Interfaces;
-using ShopPro.Modules.Domain.Entities;
 using ShopPro.Modules.Domain.Interfaces;
-using System.Diagnostics.Metrics;
-using System.Net;
-using System.Numerics;
 using static ShopPro.Modules.Application.Extension.Entity;
 
 namespace ShopPro.Modules.Application.Services
@@ -72,23 +67,7 @@ namespace ShopPro.Modules.Application.Services
                     return result;
                 }
 
-                var employees = new Employees
-                {
-                    Id = employeesRemove.empid,
-                    lastname = employeesRemove.lastname,
-                    firstname = employeesRemove.firstname,
-                    title = employeesRemove.title,
-                    titleofcourtesy = employeesRemove.titleofcourtesy,
-                    birthdate = employeesRemove.birthdate,
-                    hiredate = employeesRemove.hiredate,
-                    address = employeesRemove.address,
-                    city = employeesRemove.city,
-                    region = employeesRemove.region,
-                    postalcode = employeesRemove.postalcode,
-                    country = employeesRemove.country,
-                    phone = employeesRemove.phone,
-                    mgrid = employeesRemove.mgrid
-                };
+                var employees = employeesRemove.ToEntity();
 
                 this.employeesrepository.Remove(employees);
                 result.Success = true;
@@ -114,22 +93,7 @@ namespace ShopPro.Modules.Application.Services
                     return result;
                 }
 
-                var employees = new Employees
-                {
-                    lastname = employeesSave.lastname,
-                    firstname = employeesSave.firstname,
-                    title = employeesSave.title,
-                    titleofcourtesy = employeesSave.titleofcourtesy,
-                    birthdate = employeesSave.birthdate,
-                    hiredate = employeesSave.hiredate,
-                    address = employeesSave.address,
-                    city = employeesSave.city,
-                    region = employeesSave.region,
-                    postalcode = employeesSave.postalcode,
-                    country = employeesSave.country,
-                    phone = employeesSave.phone
-                };
-
+                var employees = employeesSave.ToEntity();
                 employeesrepository.Save(employees);
                 result.Success = true;
             }
@@ -162,18 +126,7 @@ namespace ShopPro.Modules.Application.Services
                     return result;
                 }
 
-                employees.lastname = employeesUpdate.lastname;
-                employees.firstname = employeesUpdate.firstname;
-                employees.title = employeesUpdate.title;
-                employees.titleofcourtesy = employeesUpdate.titleofcourtesy;
-                employees.birthdate = employeesUpdate.birthdate;
-                employees.hiredate = employeesUpdate.hiredate;
-                employees.address = employeesUpdate.address;
-                employees.city = employeesUpdate.city;
-                employees.region = employeesUpdate.region;
-                employees.postalcode = employeesUpdate.postalcode;
-                employees.country = employeesUpdate.country;
-                employees.phone = employeesUpdate.phone;
+                employees.UpdateFromDto(employeesUpdate);
 
                 employeesrepository.Update(employees);
                 result.Success = true;

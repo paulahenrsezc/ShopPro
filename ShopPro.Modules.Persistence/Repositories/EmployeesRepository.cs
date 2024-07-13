@@ -1,5 +1,4 @@
-﻿using ShopPro.Modules.Application.Dtos.Employees;
-using ShopPro.Modules.Domain.Entities;
+﻿using ShopPro.Modules.Domain.Entities;
 using ShopPro.Modules.Domain.Interfaces;
 using ShopPro.Modules.Persistence.Context;
 using ShopPro.Modules.Persistence.Exceptions;
@@ -29,7 +28,7 @@ namespace ShopPro.Modules.Persistence.Repositories
 
         public List<Employees> GetEmployeesById(int empid)
         {
-            var employees = _shopContext.Employees.Find(empid);
+            var employees = _shopContext.ValidateEmployeesExists(empid);
 
             if (employees is null)
             {
@@ -42,7 +41,7 @@ namespace ShopPro.Modules.Persistence.Repositories
 
         public Employees GetEntityByID(int Id)
         {
-            var employees = _shopContext.Employees.Find(Id);
+            var employees = _shopContext.ValidateEmployeesExists(Id);
             if (employees == null)
             {
                 throw new EmployeesRepositoryException($"ID no encontrado, {Id}");
@@ -53,7 +52,7 @@ namespace ShopPro.Modules.Persistence.Repositories
 
         public void Remove(Employees entity)
         {
-            var existingEmployees = _shopContext.Employees.Find(entity.Id);
+            var existingEmployees = _shopContext.ValidateEmployeesExists(entity.Id);
             if (existingEmployees != null)
             {
                 _shopContext.Employees.Remove(existingEmployees);
@@ -91,20 +90,7 @@ namespace ShopPro.Modules.Persistence.Repositories
 
                 if (employeesToUpdate != null)
                 {
-                    UpdateEmployeesFields(employeesToUpdate,
-                                     entity.lastname,
-                                     entity.firstname,
-                                     entity.title,
-                                     entity.titleofcourtesy,
-                                     entity.birthdate,
-                                     entity.hiredate,
-                                     entity.address,
-                                     entity.city,
-                                     entity.region,
-                                     entity.postalcode,
-                                     entity.country,
-                                     entity.phone);
-
+                    employeesToUpdate.UpdateFromEntity(entity);
                     _shopContext.SaveChanges();
                 }
                 else
@@ -116,27 +102,6 @@ namespace ShopPro.Modules.Persistence.Repositories
             {
                 throw new EmployeesRepositoryException("Error al actualizar el empleado.");
             }
-        }
-        private void UpdateEmployeesFields(Employees employeesToUpdate, string lastname, string firstname, string title, string titleofcourtesy, DateTime birthdate, DateTime hiredate, string address, string city, string? region, string? postalcode, string country, string phone)
-        {
-            employeesToUpdate.lastname = lastname;
-            employeesToUpdate.firstname = firstname;
-            employeesToUpdate.title = title;
-            employeesToUpdate.titleofcourtesy = titleofcourtesy;
-            employeesToUpdate.birthdate = birthdate;
-            employeesToUpdate.hiredate = hiredate;
-            employeesToUpdate.address = address;
-            employeesToUpdate.city = city;
-            employeesToUpdate.region = region;
-            employeesToUpdate.postalcode = postalcode;
-            employeesToUpdate.country = country;
-            employeesToUpdate.phone = phone;
-        }
-
-        private Employees ValidateEmployeesExists(int empid)
-        {
-            var employees = _shopContext.Employees.Find(empid);
-            return employees;
         }
 
     }

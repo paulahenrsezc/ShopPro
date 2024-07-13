@@ -1,9 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
-using ShopPro.Infraestructure.Logger.Interfaces;
+﻿using ShopPro.Infraestructure.Logger.Interfaces;
 using ShopPro.Modules.Application.Core;
 using ShopPro.Modules.Application.Dtos.OrderDetails;
+using ShopPro.Modules.Application.Extension;
 using ShopPro.Modules.Application.Interfaces;
-using ShopPro.Modules.Domain.Entities;
 using ShopPro.Modules.Domain.Interfaces;
 using static ShopPro.Modules.Application.Extension.Entity;
 
@@ -68,14 +67,7 @@ namespace ShopPro.Modules.Application.Services
                     return result;
                 }
 
-                var orderdetails = new OrderDetails
-                {
-                    Id = orderDetailsRemove.orderid,
-                    productid = orderDetailsRemove.productid,
-                    unitprice = orderDetailsRemove.unitprice,
-                    qty = orderDetailsRemove.qty,
-                    discount = orderDetailsRemove.discount
-                };
+                var orderdetails = orderDetailsRemove.ToEntity();
 
                 this.orderdetailsrepository.Remove(orderdetails);
                 result.Success = true;
@@ -101,14 +93,7 @@ namespace ShopPro.Modules.Application.Services
                     return result;
                 }
 
-                var orderDetails = new OrderDetails
-                {
-                    Id = orderDetailsSave.orderid,
-                    productid = orderDetailsSave.productid,
-                    unitprice = orderDetailsSave.unitprice,
-                    qty = orderDetailsSave.qty,
-                    discount = orderDetailsSave.discount
-                };
+                var orderDetails = orderDetailsSave.ToEntity();
 
                 orderdetailsrepository.Save(orderDetails);
                 result.Success = true;
@@ -142,10 +127,7 @@ namespace ShopPro.Modules.Application.Services
                     return result;
                 }
 
-                orderdetails.productid = orderDetailsUpdate.productid;
-                orderdetails.unitprice = orderDetailsUpdate.unitprice;
-                orderdetails.qty = orderDetailsUpdate.qty;
-                orderdetails.discount = orderDetailsUpdate.discount;
+                orderdetails.UpdateFromDto(orderDetailsUpdate);
 
                 orderdetailsrepository.Update(orderdetails);
                 result.Success = true;

@@ -2,7 +2,7 @@
 using ShopPro.Modules.Domain.Interfaces;
 using ShopPro.Modules.Persistence.Context;
 using ShopPro.Modules.Persistence.Exceptions;
-using System.Linq;
+using ShopPro.Modules.Persistence.Extentions;
 using System.Linq.Expressions;
 
 namespace ShopPro.Modules.Persistence.Repositories
@@ -28,7 +28,7 @@ namespace ShopPro.Modules.Persistence.Repositories
 
         public OrderDetails GetEntityByID(int Id)
         {
-            var orderdetails = _shopContext.OrderDetails.Find(Id);
+            var orderdetails = _shopContext.ValidateOrderDetailsExists(Id);
             if (orderdetails == null)
             {
                 throw new OrderDetailsRepositoryException($"ID no encontrado, {Id}");
@@ -39,7 +39,7 @@ namespace ShopPro.Modules.Persistence.Repositories
 
         public List<OrderDetails> GetOrderDetailsById(int orderid)
         {
-            var orderdetails = _shopContext.OrderDetails.Find(orderid);
+            var orderdetails = _shopContext.ValidateOrderDetailsExists(orderid);
 
             if (orderdetails is null)
             {
@@ -52,7 +52,7 @@ namespace ShopPro.Modules.Persistence.Repositories
 
         public void Remove(OrderDetails entity)
         {
-            var existingOrderDetails = _shopContext.OrderDetails.Find(entity.Id);
+            var existingOrderDetails = _shopContext.ValidateOrderDetailsExists(entity.Id);
             if (existingOrderDetails != null)
             {
                 _shopContext.OrderDetails.Remove(existingOrderDetails);
@@ -90,12 +90,7 @@ namespace ShopPro.Modules.Persistence.Repositories
 
                 if (orderdetailsToUpdate != null)
                 {
-                    UpdateOrderDetailsFields(orderdetailsToUpdate,
-                                     entity.productid,
-                                     entity.unitprice,
-                                     entity.qty,
-                                     entity.discount);
-
+                    orderdetailsToUpdate.UpdateFromEntity(entity);
                     _shopContext.SaveChanges();
                 }
                 else
@@ -107,20 +102,6 @@ namespace ShopPro.Modules.Persistence.Repositories
             {
                 throw new OrderDetailsRepositoryException("Error al actualizar la orden de detalles.");
             }
-        }
-
-        private void UpdateOrderDetailsFields(OrderDetails orderdetailsToUpdate, int productid, decimal unitprice, short qty, decimal discount)
-        {
-            orderdetailsToUpdate.productid = productid;
-            orderdetailsToUpdate.unitprice = unitprice;
-            orderdetailsToUpdate.qty = qty;
-            orderdetailsToUpdate.discount = discount;
-        }
-
-        private OrderDetails ValidateOrderDetailsExists(int orderid)
-        {
-            var orderdetails = _shopContext.OrderDetails.Find(orderid);
-            return orderdetails;
         }
 
     }
