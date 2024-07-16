@@ -7,10 +7,9 @@ namespace ShopPro.Modules.Domain.Entities
     [Table("Employees", Schema = "HR")]
     public class Employees : BaseEntity<int>
     {
+        [Key]
         [Column("empid")]
         public override int Id { get; set; }
-
-        [Key]
         public string lastname { get; set; }
         public string firstname { get; set; }
         public string title { get; set; }

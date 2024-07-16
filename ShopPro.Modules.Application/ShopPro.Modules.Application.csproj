@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ShopPro.Infraestructure\ShopPro.Infraestructure.csproj" />
+    <ProjectReference Include="..\ShopPro.Modules.Domain\ShopPro.Modules.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
