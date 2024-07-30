@@ -1,8 +1,8 @@
 ﻿namespace ShopPro.Web.Models.OrderDetails
 {
-    public class OrderDetailsModel
+    public class OrderDetailsUpdateModel
     {
-        public int id { get; set; }
+        public int orderid { get; set; }
         public int productid { get; set; }
         public decimal unitprice { get; set; }
         public short qty { get; set; }

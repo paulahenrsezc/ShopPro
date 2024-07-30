@@ -133,7 +133,6 @@ namespace ShopPro.Web.Controllers
         // GET: EmployeesController/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
-
             EmployeesGetResult employeesGetResult = new EmployeesGetResult();
 
             using (var httpClient = new HttpClient(this.httpClientHandler))
@@ -145,7 +144,6 @@ namespace ShopPro.Web.Controllers
                     if (response.StatusCode == System.Net.HttpStatusCode.OK)
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
-
                         employeesGetResult = JsonConvert.DeserializeObject<EmployeesGetResult>(apiResponse);
 
                         if (!employeesGetResult.success)
@@ -154,10 +152,28 @@ namespace ShopPro.Web.Controllers
                             return View();
                         }
                     }
-
                 }
             }
-            return View(employeesGetResult.data);
+
+            EmployeesUpdateModel employeesUpdateModel = new EmployeesUpdateModel
+            {
+                empid = employeesGetResult.data.id,
+                lastname = employeesGetResult.data.lastname,
+                firstname = employeesGetResult.data.firstname,
+                title = employeesGetResult.data.title,
+                titleofcourtesy = employeesGetResult.data.titleofcourtesy,
+                birthdate = employeesGetResult.data.birthdate,
+                hiredate = employeesGetResult.data.hiredate,
+                address = employeesGetResult.data.address,
+                city = employeesGetResult.data.city,
+                region = employeesGetResult.data.region,
+                postalcode = employeesGetResult.data.postalcode,
+                country = employeesGetResult.data.country,
+                phone = employeesGetResult.data.phone,
+                mgrid = employeesGetResult.data.mgrid
+            };
+
+            return View(employeesUpdateModel);
         }
 
         // POST: EmployeesController/Edit/5
@@ -173,33 +189,33 @@ namespace ShopPro.Web.Controllers
                 {
                     var url = "http://localhost:40947/api/Employees/UpdateEmployees";
 
-                    using (var response = await httpClient.PutAsJsonAsync<EmployeesUpdateModel>(url, employeesUpdate))
+                    using (var response = await httpClient.PutAsJsonAsync(url, employeesUpdate))
                     {
                         if (response.StatusCode == System.Net.HttpStatusCode.OK)
                         {
                             string apiResponse = await response.Content.ReadAsStringAsync();
-
                             employeesUpdateResult = JsonConvert.DeserializeObject<EmployeesUpdateResult>(apiResponse);
 
                             if (!employeesUpdateResult.success)
                             {
                                 ViewBag.Message = employeesUpdateResult.message;
-                                return View();
+                                return View(employeesUpdate);
                             }
                         }
                         else
                         {
-                            ViewBag["Message"] = employeesUpdateResult.message;
-                            return View();
+                            ViewBag.Message = "Error en la actualización del empleado.";
+                            return View(employeesUpdate);
                         }
-
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                ViewBag.Message = "Error inesperado.";
+                return View(employeesUpdate);
             }
         }
 
