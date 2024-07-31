@@ -1,7 +1,12 @@
+using ShopPro.Web;
+using ShopPro.Web.Interfaces;
+using ShopPro.Web.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDependencies();
 
 var app = builder.Build();
 
